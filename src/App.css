@@ -9,9 +9,15 @@
 
 .App-header {
   background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+	padding: 10px;
+  color: rgb(87, 150, 231);
+}
+
+.App-content {
+	margin: 25px 25px 25px 25px;
+	font-size: large;
+	align-content: center;
+	display: inline-block;
 }
 
 .App-title {
@@ -22,7 +28,25 @@
   font-size: large;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.App-button {
+	background-color: rgb(130, 179, 228);
+	font-size: large;
+	border-radius: 10px;
+	padding: 8px 15px 8px 15px;
+	margin: 10px 10px 10px 10px;
+}
+
+.inValid {
+	color: red;
+}
+
+button {
+	background-color: rgb(197, 212, 226);
+	border-radius: 6px;
+	padding: 2px 4px 2px 4px;
+	margin: 2px 4px 2px 4px;
+}
+
+.NewDictionary {
+	margin: 30px;
 }
