@@ -2,29 +2,16 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { selectDictionary } from '../actions/dictionaryActions';
 import { deleteDictionary } from '../actions/dictionaryActions';
+import { changeView } from '../actions/dictionaryActions';
 
 class Overview extends React.Component<any> {
-
-	constructor(props: any) {
-		super(props);
-		
-		this.state = {
-		// A hardcoded dictionary for testing
-		//	newDictionary : [
-		//		{ from: "Anthracite", to: "Gray"},
-		//		{ from: "Midnight Black", to: "Black"},
-		//		{ from: "Mystic Silver", to: "Silver"}
-		//	]
-			newDictionary: [] // set to the selected dictionary
-		}
-	}
 
 	handleSelect = (event: any) => {
 		event.target.blur();
 		console.log("handleSelect " + event.target.id);
 
 		this.props.selectDictionary(event.target.id);
-		this.props.handleView("viewEdit");
+		this.props.changeView("viewEdit");
 	}
 
 	handleDelete = (event: any) => {
@@ -47,8 +34,8 @@ class Overview extends React.Component<any> {
 			
 			rows.push(<tr key={ idx }>
 									<td>Dictionary { idx }</td>
-									<td><button id={ rowId } onClick={ this.handleSelect }>View/Edit</button></td>
-									<td><button id={ rowId } onClick={ this.handleDelete }>Delete</button></td>
+									<td><button className="App-button-row" id={ rowId } onClick={ this.handleSelect }>View/Edit</button></td>
+									<td><button className="App-button-row" id={ rowId } onClick={ this.handleDelete }>Delete</button></td>
 								</tr>);
     }
 
@@ -74,8 +61,7 @@ class Overview extends React.Component<any> {
 
 const mapStateToProps = (state :any) => ({
 	dictionaries: state.root.dictionaries,
-
 	state: state
 });
 
-export default connect(mapStateToProps, { deleteDictionary, selectDictionary } )(Overview);
+export default connect(mapStateToProps, { deleteDictionary, selectDictionary, changeView } )(Overview);

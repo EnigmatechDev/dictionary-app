@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { createDictionary } from '../actions/dictionaryActions';
+import { changeView } from '../actions/dictionaryActions';
 
 class CreateDictionary extends React.Component<any> {
+
 	constructor(props: any) {
 		super(props);
 		
@@ -42,7 +44,7 @@ class CreateDictionary extends React.Component<any> {
 		console.log("handleNewRow...");
 
 		let newDictionary = this.state['newDictionary'];
-		newDictionary.push({from: "-", to: "-"});
+		newDictionary.push({from: "", to: ""});
 		console.log(newDictionary);
 
 		this.setState({newDictionary: newDictionary});
@@ -83,6 +85,7 @@ class CreateDictionary extends React.Component<any> {
 		event.target.blur();
 		
 		this.props.createDictionary(this.state['newDictionary']);
+		this.props.changeView("viewEdit");
 	}
 
 	render() {
@@ -93,14 +96,15 @@ class CreateDictionary extends React.Component<any> {
 		
 		let rows = this.state['newDictionary'].map( (entry:any) => {
 			valClass = this.validateRow(row);
-    	return <DictionaryRow row={ row } valClass={ valClass } key={ row++ } data={ entry } onChange={ this.handleChange } onDelete={ this.handleDelete } />
+			return (	<DictionaryRow row={ row } valClass={ valClass } key={ row++ } data={ entry }
+								onChange={ this.handleChange } onDelete={ this.handleDelete } /> );
 		});
 
-		return (<div>
-							<div><table><tbody>
+		return (<div><h3>Create new dictionary</h3>
+							<div><table className='App-table'><tbody>
 								<tr><th>From</th><th>To</th>
-								<th><button onClick={ this.handleNewRow }>Add row</button></th>
-								<th><button onClick={ this.handleStore }>Store</button></th></tr>
+								<th><button className="App-button-sml" onClick={ this.handleNewRow }>Add row</button></th>
+								<th><button className="App-button-sml" onClick={ this.handleStore }>Store</button></th></tr>
 								{ rows }
 							</tbody></table></div>
 						</div>);
@@ -111,13 +115,15 @@ const DictionaryRow = (props: any) => {
 	return (
 		<tr>
 			<td>
-				<input className={ props.valClass } id={ "1_" + props.row } type="text" value={ props.data.from } onChange = { props.onChange } />
+				<input className={ props.valClass } id={ "1_" + props.row } type="text" 
+					value={ props.data.from } onChange = { props.onChange } />
 			</td>
 			<td>
-				<input className={ props.valClass } id={ "2_" + props.row } type="text" value={ props.data.to } onChange = { props.onChange } />
+				<input className={ props.valClass } id={ "2_" + props.row } type="text" 
+					value={ props.data.to } onChange = { props.onChange } />
 			</td>
 			<td>
-				<button id={ props.row } onClick={ props.onDelete }>Delete row</button>
+				<button className="App-button-row" id={ props.row } onClick={ props.onDelete }>Delete row</button>
 			</td>
 		</tr>
 	);
@@ -127,4 +133,4 @@ const mapStateToProps = (state :any) => ({
 	state: state
 });
 
-export default connect(mapStateToProps, { createDictionary })(CreateDictionary);
+export default connect(mapStateToProps, { createDictionary, changeView })(CreateDictionary);

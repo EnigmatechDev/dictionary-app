@@ -1,4 +1,4 @@
-import { NEW_DICTIONARY, UPDATE_DICTIONARY, DELETE_DICTIONARY, SELECT_DICTIONARY } from './types';
+import { NEW_DICTIONARY, UPDATE_DICTIONARY, DELETE_DICTIONARY, SELECT_DICTIONARY, CHANGE_VIEW } from './types';
 
 // this ES6 syntax is the same as above function
 /*
@@ -61,6 +61,18 @@ export function deleteDictionary(idx:Number) {
 		dispatch({
 				type: DELETE_DICTIONARY,
 				payload: idx
+		});
+	}
+}
+
+export function changeView(view:String) {
+	console.log("changeView ");
+
+	return function(dispatch:any) {
+		console.log("changeView dispatch()");
+		dispatch({
+				type: CHANGE_VIEW,
+				payload: view
 		});
 	}
 }
