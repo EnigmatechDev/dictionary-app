@@ -1,9 +1,13 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
+import { createDictionary } from '../actions/dictionaryActions';
+import { updateDictionary } from '../actions/dictionaryActions';
 
 interface IProps {
 	id: Number,
 	onStore: Function,
-	tData: { from: string, to: string }[]
+	tData: { from: string, to: string }[],
+	createDictionary: Function
 }
 
 interface IState {
@@ -88,7 +92,18 @@ export class Dictionary extends React.Component<IProps, IState> {
 		event.target.blur();
 
 		console.log("handleStore " + this.state.dictId);
-		this.props.onStore(this.state.dictId, this.state.tData);
+		// this.props.onStore(this.state.dictId, this.state.tData);
+		// console.log(this.state.tData);
+
+		// a hardcoded dictionary
+		const dictionary = [
+			{ from: "Anthracite", to: "Gray"},
+			{ from: "Midnight Black", to: "Black"},
+			{ from: "Mystic Silver", to: "Silver"}
+		];
+		
+		this.props.createDictionary(dictionary);
+		//createDictionary(this.state.tData);
 	}
 
 	render() {
@@ -124,3 +139,5 @@ const DictionaryRow = (props: any) => {
 		</tr>
 	);
 }
+
+export default connect(null, { createDictionary, updateDictionary })(Dictionary);

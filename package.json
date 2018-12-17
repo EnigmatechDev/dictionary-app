@@ -3,11 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/react-redux": "^6.0.11",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "react-redux": "^6.0.0",
+    "react-redux": "^5.1.1",
     "react-scripts-ts": "^4.0.8",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
+    "ts-jest": "^23.10.5"
   },
   "scripts": {
     "start": "react-scripts-ts start",
@@ -21,6 +24,7 @@
     "@types/react": "^16.7.17",
     "@types/react-dom": "^16.0.11",
     "redux-devtools": "^3.4.2",
+    "redux-devtools-extension": "^2.13.7",
     "typescript": "^3.2.2"
   },
   "browserslist": [
