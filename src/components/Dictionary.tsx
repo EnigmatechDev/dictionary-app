@@ -2,124 +2,135 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { createDictionary } from '../actions/dictionaryActions';
 import { updateDictionary } from '../actions/dictionaryActions';
+import { changeView } from '../actions/dictionaryActions';
 
-interface IProps {
-	id: Number,
-	onStore: Function,
-	tData: { from: string, to: string }[],
-	createDictionary: Function
-}
+class Dictionary extends React.Component<any> {
 
-interface IState {
-	dictId: Number,
-	tData: { from: string, to: string }[]
-}
-
-export class Dictionary extends React.Component<IProps, IState> {
-
-	state: IState;
-
-	constructor(props: IProps) {
+	constructor(props: any) {
 		super(props);
+	
+		console.log("Dictionary constructor createNew");
 
-		console.log("NewDictionary Id " + props.id);
-
-		this.state = {
-			dictId: props.id,
-			tData: props.tData
+		if ( this.props.view === "createNew") {
+			this.state = {
+				// A hardcoded dictionary for testing
+				dictionary : [
+					{ from: "Anthracite", to: "Gray" },
+					{ from: "Midnight Black", to: "Black" },
+					{ from: "Mystic Silver", to: "Silver" }
+				]
+			}
+		} else {
+			this.state = {
+				dictionary : this.props.dictionaries[ this.props.selected ]
+			}
 		}
-	};
+
+		this.handleStore = this.handleStore.bind(this);
+		this.validateRow = this.validateRow.bind(this);
+		this.handleNewRow = this.handleNewRow.bind(this);
+	}
 
 	validateRow(row: number) {
-		console.log("isDuplicate...");
-
 		let count = 0;
 		let valClass = "valid"
 
-		for(var i=0; i < this.state.tData.length; i++) {
-			if( this.state.tData[row].from === this.state.tData[i].from )
+		for(var i=0; i < this.state['dictionary'].length; i++) {
+			if( this.state['dictionary'][row].from === this.state['dictionary'][i].from )
 				count++;
 		}
 	
 		if(count > 1)
 			valClass = "inValid";
+
 		return valClass;
 	}
 
-	handleNewRow = (event: any) => {
+	handleNewRow (event: any) {
 		event.target.blur();
-		console.log("handleClick...");
+		console.log("handleNewRow");
 
-		let newTData = this.state.tData;
-		newTData.push({from: "-", to: "-"});
-		console.log(newTData);
+		let dictionary = this.state['dictionary'];
+		dictionary.push({from: "", to: ""});
+		console.log(dictionary);
 
-		this.setState({tData: newTData});
-		console.log(this.state.tData);
+		this.setState({dictionary: dictionary});
+		console.log(this.state['dictionary']);
 	}
 
-	handleChange = (event: any) => {
+	handleTextChange = (event: any) => {
 
-		console.log("handleChange...");
-		let newTData = this.state.tData;
+		console.log("ViewEdit handleChange");
+		let dictionary = this.state['dictionary'];
 		let cell = event.target.id.split("_");
 
 		if(cell[0] == 1) {
 			// the From column
-			newTData[ cell[1] ] = { from: event.target.value, to: newTData[ cell[1] ].to };
+			dictionary[ cell[1] ] = { from: event.target.value, to: dictionary[ cell[1] ].to };
 		} else
 		
 		if(cell[0] == 2) {
 			// the To column
-			newTData[ cell[1] ] = { from: newTData[ cell[1] ].from, to: event.target.value };
+			dictionary[ cell[1] ] = { from: dictionary[ cell[1] ].from, to: event.target.value };
 		}
 		
-		this.setState({tData: newTData});
+		this.setState({dictionary: dictionary});
 	}
 
-	handleDelete = (event: any) => {
+	handleDeleteRow = (event: any) => {
 		event.target.blur();
 		console.log("handleDelete " + event.target.id);
 
-		let newTData = this.state.tData;
+		let dictionary = this.state['dictionary'];
 
 		// remove corresponding element from array
-		newTData.splice(event.target.id, 1);
-		this.setState({tData: newTData});
+		dictionary.splice(event.target.id, 1);
+		this.setState({dictionary: dictionary});
 	}
 
 	handleStore = (event: any) => {
 		event.target.blur();
 
-		console.log("handleStore " + this.state.dictId);
-		// this.props.onStore(this.state.dictId, this.state.tData);
-		// console.log(this.state.tData);
+		if (this.props.view === "createNew" ) {
 
-		// a hardcoded dictionary
-		const dictionary = [
-			{ from: "Anthracite", to: "Gray"},
-			{ from: "Midnight Black", to: "Black"},
-			{ from: "Mystic Silver", to: "Silver"}
-		];
-		
-		this.props.createDictionary(dictionary);
-		//createDictionary(this.state.tData);
+			this.props.createDictionary(this.state['dictionary']);
+			this.props.changeView("viewEdit");
+
+		} else {
+			this.props.updateDictionary(this.state['dictionary']);
+		}
 	}
 
 	render() {
-		console.log("render()...");
-		
+		console.log("ViewEdit render()...");
+
+		console.log("ViewEdit props");
+		console.log(this.props);
+
+		console.log("ViewEdit state");
+		console.log(this.state);
+
+		let title = "Create new dictionary";
 		let valClass = "";
 		var row = 0;
-		let rows = this.state.tData.map(entry => {
+		
+		let rows = this.state['dictionary'].map( (entry:any) => {
 			valClass = this.validateRow(row);
-      return <DictionaryRow row={ row } valClass={ valClass } key={ row++ } data={ entry } onChange={ this.handleChange } onDelete={ this.handleDelete } />
+
+			return ( 	<DictionaryRow row={ row } valClass={ valClass } key={ row++ } data={ entry }
+								onChange={ this.handleTextChange } onDelete={ this.handleDeleteRow } /> );
 		});
-		return (<div>
-							<div><table><tbody><tr><th>From</th><th>To</th>
-							<th><button onClick={ this.handleNewRow }>Add row</button></th>
-							<th><button onClick={ this.handleStore }>Store</button></th></tr>
-							{ rows }</tbody></table></div>
+
+		if (this.props.view === "viewEdit")
+			title = "View / edit dictionary";
+
+		return (<div><h3>{ title }</h3>
+							<div><table className='App-table'><tbody>
+								<tr><th>From</th><th>To</th>
+								<th><button className="App-button-sml"onClick={ this.handleNewRow }>Add row</button></th>
+								<th><button className="App-button-sml"onClick={ this.handleStore }>Store</button></th></tr>
+								{ rows }
+							</tbody></table></div>
 						</div>);
 	}
 }
@@ -128,16 +139,25 @@ const DictionaryRow = (props: any) => {
 	return (
 		<tr>
 			<td>
-				<input className={ props.valClass } id={ "1_" + props.row } type="text" value={ props.data.from } onChange={ props.onChange } />
+				<input className={ props.valClass } id={ "1_" + props.row } type="text" 
+					value={ props.data.from } onChange = { props.onChange } />
 			</td>
 			<td>
-				<input className={ props.valClass } id={ "2_" + props.row } type="text" value={ props.data.to } onChange={ props.onChange} />
+				<input className={ props.valClass } id={ "2_" + props.row } type="text" 
+					value={ props.data.to } onChange = { props.onChange } />
 			</td>
 			<td>
-				<button id={ props.row } onClick={ props.onDelete }>Delete row</button>
+				<button className="App-button-row" id={ props.row } onClick={ props.onDelete }>Delete row</button>
 			</td>
 		</tr>
 	);
 }
 
-export default connect(null, { createDictionary, updateDictionary })(Dictionary);
+const mapStateToProps = (state :any) => ({
+	state: state,
+	view: state.root.view,
+	selected: state.root.selected,
+	dictionaries: state.root.dictionaries
+});
+
+export default connect(mapStateToProps, { changeView, createDictionary, updateDictionary })(Dictionary);

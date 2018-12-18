@@ -32,13 +32,7 @@ export default function dictionaryReducer(state = initialState, action: any) {
 
 		case UPDATE_DICTIONARY: {
 			console.log('UPDATE_DICTIONARY Reducer');
-			const dictionaries = state.dictionaries;
-			const selected = state.selected;
-			const view = state.view;
-			// FIXME need to work out TS indexing arrays!!
-			// dictionaries[action.payload.id] = action.payload.dictionary;
-
-			return {view, selected, dictionaries };
+			return state;
 		}
 			
 		case DELETE_DICTIONARY: {
@@ -63,7 +57,7 @@ export default function dictionaryReducer(state = initialState, action: any) {
 		}
 		
 		default:
-			console.log("action " + action.type);
+			console.log("Reducer action " + action.type);
 			return state;	
 	}
 }

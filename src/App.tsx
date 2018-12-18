@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 
 import Controls from './components/Controls';
 import Overview from './components/Overview';
-import ViewEdit from './components/ViewEdit';
-import CreateDictionary from './components/CreateDictionary';
+import Dictionary from './components/Dictionary';
 
 import './App.css';
 
@@ -18,12 +17,8 @@ class App extends React.Component<any> {
 
 		if(this.props.view === "overview") { 
 			content = <Overview />
-		} else
-		if(this.props.view === "viewEdit") {
-			content = <ViewEdit />
-		} else
-		if(this.props.view === "creatNew") {
-			content = <CreateDictionary />
+		} else {
+			content = <Dictionary />
 		}
 
 		return (

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { changeView } from '../actions/dictionaryActions';
 
 class Controls extends React.Component<any> {
-	
+
 	handleView = (event: any) => {
 		event.target.blur();
 		this.props.changeView(event.target.id);
@@ -13,7 +13,6 @@ class Controls extends React.Component<any> {
 		if (this.props.view === "viewEdit") {
 			return (
 				<div className="controls">
-				<button className="App-button" id="creatNew" onClick={ this.handleView }>Create New Dictionary</button>
 				<button className="App-button" id="overview" onClick={ this.handleView }>View All Dictionaries</button>
 				</div>
 			);
@@ -21,7 +20,7 @@ class Controls extends React.Component<any> {
 		if (this.props.view === "overview") {
 			return (
 				<div className="controls">
-				<button className="App-button" id="creatNew" onClick={ this.handleView }>Create New Dictionary</button>
+				<button className="App-button" id="createNew" onClick={ this.handleView }>Create New Dictionary</button>
 				</div>
 			);
 		} else {

@@ -51,7 +51,7 @@ class Overview extends React.Component<any> {
 								<p>
 								{ message }
 								</p>
-								<table>
+								<table className="App-table">
 									<tbody>{ rows }</tbody>
 								</table>
 							</div>
